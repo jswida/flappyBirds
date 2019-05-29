@@ -8,12 +8,13 @@
 
 import SpriteKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     var bird = SKSpriteNode()
     var bg = SKSpriteNode()
     var pipe = SKSpriteNode()
     var pipe2 = SKSpriteNode()
     var movePipesAndRemove = SKAction()
+    var RemoveBirdAction = SKAction()
     var pipes = SKNode()
     var moving: SKNode!
     var canRestart = Bool()
@@ -21,7 +22,9 @@ class GameScene: SKScene {
     var pipeDownTexture = SKTexture()
     var score = NSInteger()
     var scoreLabel = SKLabelNode()
-
+    var goS = SKSpriteNode()
+    var go = SKTexture()
+    
     
     override func didMove(to view: SKView) {
         canRestart = true
@@ -36,8 +39,6 @@ class GameScene: SKScene {
         
         moving = SKNode()
         self.addChild(moving)
-//        pipes = SKNode()
-//        moving.addChild(pipes)
         
         let moveBG = SKAction.move(by: CGVector(dx: -bgTexture.size().width, dy: 0), duration: 4)
         let changeBG = SKAction.move(by: CGVector(dx: bgTexture.size().width, dy: 0), duration: 0)
@@ -111,14 +112,6 @@ class GameScene: SKScene {
         bird.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: birdTexture.size().width, height: birdTexture.size().height))
         bird.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
         bird.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 120))
-        
-
-//        let distance = CGFloat(self.frame.width + 2.0 * pipeUpTexture.size().width)
-//        let movePipes = SKAction.moveBy(x: -distance, y: 0.0, duration: TimeInterval(0.01 * distance))
-//        let removePipe = SKAction.removeFromParent()
-//        var movePipesAndRemove = SKAction.sequence([movePipes, removePipe])
-        
-        
     }
    
     override func update(_ currentTime: TimeInterval) {
@@ -152,33 +145,23 @@ class GameScene: SKScene {
         pairDown.run(movePipesAndRemove)
         moving.addChild(pairDown)
         
-        
-//        let heigth = UInt32(self.frame.size.height / 4)
-//        let y = Double(arc4random_uniform(heigth) + heigth)
-//
-//        let pipeDown = SKSpriteNode(texture: pipeDownTexture)
-//        pipeDown.setScale(2.0)
-//        pipeDown.position = CGPoint(x: 0.0, y: 0)
-//
-//        pipeDown.physicsBody = SKPhysicsBody(rectangleOf: pipeDown.size)
-//        pipeDown.physicsBody?.isDynamic = false
-//        pair.addChild(pipeDown)
-//
-//        let pipeUp = SKSpriteNode(texture: pipeUpTexture)
-//        pipeUp.setScale(2.0)
-//        pipeUp.position = CGPoint(x: 0.0, y: y)
-//
-//        pipeUp.physicsBody = SKPhysicsBody(rectangleOf: pipeUp.size)
-//        pipeUp.physicsBody?.isDynamic = false
-//        pair.addChild(pipeUp)
-//
-//        let contactNode = SKNode()
-//        contactNode.position = CGPoint(x: pipeDown.size.width + bird.size.width / 2, y: self.frame.midY)
-//        contactNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize( width: pipeUp.size.width, height: self.frame.size.height ))
-//        contactNode.physicsBody?.isDynamic = false
-//        pair.addChild(contactNode)
-//        pair.run(movePipesAndRemove)
-//        pipes.addChild(pair)
+        pairDown.physicsBody!.contactTestBitMask = pairDown.physicsBody!.collisionBitMask
+        pair.physicsBody!.contactTestBitMask = pair.physicsBody!.collisionBitMask
     }
-
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        collisionBetween(bir: contact.bodyA.node!, pillar: contact.bodyB.node!)
+    }
+    
+    func collisionBetween(bir: SKNode, pillar: SKNode) {
+        bird.removeFromParent()
+        print("Śmierć!!")
+        
+        go = SKTexture(imageNamed: "gameOver.png")
+        goS = SKSpriteNode(texture: go)
+        goS.position = CGPoint(x: 0, y: 0)
+        goS.setScale(0.5)
+        goS.zPosition = 1
+        moving.addChild(goS)
+    }
 }

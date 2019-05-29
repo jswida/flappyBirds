@@ -12,6 +12,8 @@ import GameplayKit
 
 class GameViewController: UIViewController {
 
+    @IBOutlet var gameoverView: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -20,7 +22,7 @@ class GameViewController: UIViewController {
             if let scene = SKScene(fileNamed: "GameScene") {
                 // Set the scale mode to scale to fit the window
                 scene.scaleMode = .aspectFill
-                
+//                scene.delegate = self as! SKSceneDelegate
                 // Present the scene
                 view.presentScene(scene)
             }
@@ -29,6 +31,7 @@ class GameViewController: UIViewController {
             
             view.showsFPS = true
             view.showsNodeCount = true
+            
         }
     }
 
