@@ -36,8 +36,8 @@ class GameScene: SKScene {
         
         moving = SKNode()
         self.addChild(moving)
-        pipes = SKNode()
-        moving.addChild(pipes)
+//        pipes = SKNode()
+//        moving.addChild(pipes)
         
         let moveBG = SKAction.move(by: CGVector(dx: -bgTexture.size().width, dy: 0), duration: 4)
         let changeBG = SKAction.move(by: CGVector(dx: bgTexture.size().width, dy: 0), duration: 0)
@@ -50,29 +50,32 @@ class GameScene: SKScene {
             bg.size.height = self.frame.height
             bg.run(animateBG)
             bg.zPosition = -1
-//            self.addChild(bg)
             moving.addChild(bg)
             x += 1
             
         }
         
         //pipes
-//        pipeUpTexture = SKTexture(imageNamed: "PipeDown.png")
-//        pipeUpTexture.filteringMode = .nearest
-//        pipeDownTexture = SKTexture(imageNamed: "pipe2")
-//        pipeDownTexture.filteringMode = .nearest
-//
-//        let distance = CGFloat(self.frame.width + 2.0 * pipeUpTexture.size().width)
-//        let movePipes = SKAction.moveBy(x: -distance, y: 0.0, duration: TimeInterval(0.01 * distance))
-////        let removePipe = SKAction.removeFromParent()
-//        movePipesAndRemove = SKAction.sequence([movePipes])
-//
-//
-//        let spawn = SKAction.run(spawnPipe)
-//        let delay = SKAction.wait(forDuration: TimeInterval(2.0))
-//        let spawnanddelay = SKAction.sequence([spawn, delay])
-//        let spawnforever = SKAction.repeatForever(spawnanddelay)
-//        self.run(spawnforever)
+        pipeUpTexture = SKTexture(imageNamed: "pipe1.png")
+        pipeUpTexture.filteringMode = .nearest
+        pipeDownTexture = SKTexture(imageNamed: "pipe2")
+        pipeDownTexture.filteringMode = .nearest
+
+        let distance = CGFloat(self.frame.width + 4.0 * pipeUpTexture.size().width)
+        let movePipes = SKAction.moveBy(x: -distance, y: 0.0, duration: TimeInterval(0.01 * distance))
+        let removePipe = SKAction.removeFromParent()
+        movePipesAndRemove = SKAction.sequence([movePipes, removePipe])
+
+
+        let spawn = SKAction.run(spawnPipe)
+        
+        let delay = SKAction.wait(forDuration: TimeInterval(5.0))
+        
+        let spawnanddelay = SKAction.sequence([spawn, delay])
+        
+        let spawnforever = SKAction.repeatForever(spawnanddelay)
+        
+        self.run(spawnforever)
         
         //bird
         let birdTexture = SKTexture(imageNamed: "bird3.png")
@@ -86,14 +89,12 @@ class GameScene: SKScene {
       
         bird.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
         bird.run(animationForever)
-//        addChild(bird)
         self.addChild(bird)
         
         let ground = SKNode()
         ground.position = CGPoint(x:self.frame.midX, y: -self.frame.height/2)
         ground.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: self.frame.width, height: 1))
         ground.physicsBody?.isDynamic = false
-//        addChild(ground)
         self.addChild(ground)
         
         score = 0;
@@ -124,18 +125,40 @@ class GameScene: SKScene {
         // Called before each frame is rendered
     }
     
-//    func spawnPipe() {
-//
-//        let pair = SKNode()
-//        pair.position = CGPoint(x: self.frame.size.width + pipeUpTexture.size().width * 2, y: 0)
-//        pair.zPosition = -10
-//
+    func spawnPipe() {
+
+        let number = Int.random(in: 0 ..< 10)
+        let pair = SKSpriteNode(texture: pipeUpTexture)
+        // rand i go dodac yeah
+        let positionY = (Int(pair.size.height)) - 500 - number*40
+        pair.position = CGPoint(x: Int(self.frame.width) + 100, y: positionY)
+        pair.physicsBody = SKPhysicsBody(rectangleOf: pair.size)
+        pair.setScale(1.0)
+        pair.physicsBody?.isDynamic = false
+        pair.physicsBody?.affectedByGravity = false
+        pair.zPosition = 1
+        pair.run(movePipesAndRemove)
+        moving.addChild(pair)
+        
+        let pairDown = SKSpriteNode(texture: pipeDownTexture)
+        // rand i go dodac yeah
+        let positionDown =  -1000  - number*40
+        pairDown.position = CGPoint(x: Int(self.frame.width) + 100, y: positionDown)
+        pairDown.physicsBody = SKPhysicsBody(rectangleOf: pair.size)
+        pairDown.setScale(1.0)
+        pairDown.physicsBody?.isDynamic = false
+        pairDown.physicsBody?.affectedByGravity = false
+        pairDown.zPosition = 1
+        pairDown.run(movePipesAndRemove)
+        moving.addChild(pairDown)
+        
+        
 //        let heigth = UInt32(self.frame.size.height / 4)
 //        let y = Double(arc4random_uniform(heigth) + heigth)
 //
 //        let pipeDown = SKSpriteNode(texture: pipeDownTexture)
 //        pipeDown.setScale(2.0)
-//        pipeDown.position = CGPoint(x: 0.0, y: y + Double(pipeDown.size.height) + 150.0)
+//        pipeDown.position = CGPoint(x: 0.0, y: 0)
 //
 //        pipeDown.physicsBody = SKPhysicsBody(rectangleOf: pipeDown.size)
 //        pipeDown.physicsBody?.isDynamic = false
@@ -156,8 +179,6 @@ class GameScene: SKScene {
 //        pair.addChild(contactNode)
 //        pair.run(movePipesAndRemove)
 //        pipes.addChild(pair)
-//
-//
-//    }
+    }
 
 }
