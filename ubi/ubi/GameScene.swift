@@ -98,12 +98,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         ground.physicsBody?.isDynamic = false
         self.addChild(ground)
         
-        score = 0;
-        scoreLabel = SKLabelNode()
-        scoreLabel.position = CGPoint(x:self.frame.midX, y: 3 * self.frame.size.height / 4)
-        scoreLabel.zPosition = -10
-        scoreLabel.text = String(score)
-        self.addChild(scoreLabel)
+//        score = 0;
+//        scoreLabel = SKLabelNode()
+//        scoreLabel.position = CGPoint(x:self.frame.midX, y: 3 * self.frame.size.height / 4)
+//        scoreLabel.zPosition = -10
+//        scoreLabel.text = String(score)
+//        self.addChild(scoreLabel)
     }
    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -155,13 +155,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func collisionBetween(bir: SKNode, pillar: SKNode) {
         bird.removeFromParent()
-        print("Śmierć!!")
-        
         go = SKTexture(imageNamed: "gameOver.png")
         goS = SKSpriteNode(texture: go)
         goS.position = CGPoint(x: 0, y: 0)
         goS.setScale(0.5)
-        goS.zPosition = 1
+        goS.zPosition = 1000
         moving.addChild(goS)
+        
     }
 }
