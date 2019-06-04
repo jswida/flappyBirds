@@ -67,15 +67,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let removePipe = SKAction.removeFromParent()
         movePipesAndRemove = SKAction.sequence([movePipes, removePipe])
 
-
         let spawn = SKAction.run(spawnPipe)
-        
         let delay = SKAction.wait(forDuration: TimeInterval(5.0))
-        
         let spawnanddelay = SKAction.sequence([spawn, delay])
-        
         let spawnforever = SKAction.repeatForever(spawnanddelay)
-        
         self.run(spawnforever)
         
         //bird
@@ -98,12 +93,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         ground.physicsBody?.isDynamic = false
         self.addChild(ground)
         
-//        score = 0;
-//        scoreLabel = SKLabelNode()
-//        scoreLabel.position = CGPoint(x:self.frame.midX, y: 3 * self.frame.size.height / 4)
-//        scoreLabel.zPosition = -10
-//        scoreLabel.text = String(score)
-//        self.addChild(scoreLabel)
     }
    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -115,14 +104,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
    
     override func update(_ currentTime: TimeInterval) {
-        // Called before each frame is rendered
     }
     
     func spawnPipe() {
 
         let number = Int.random(in: 0 ..< 10)
         let pair = SKSpriteNode(texture: pipeUpTexture)
-        // rand i go dodac yeah
         let positionY = (Int(pair.size.height)) - 500 - number*40
         pair.position = CGPoint(x: Int(self.frame.width) + 100, y: positionY)
         pair.physicsBody = SKPhysicsBody(rectangleOf: pair.size)
@@ -134,7 +121,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         moving.addChild(pair)
         
         let pairDown = SKSpriteNode(texture: pipeDownTexture)
-        // rand i go dodac yeah
         let positionDown =  -1000  - number*40
         pairDown.position = CGPoint(x: Int(self.frame.width) + 100, y: positionDown)
         pairDown.physicsBody = SKPhysicsBody(rectangleOf: pair.size)
